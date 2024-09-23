@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <div class="dashboard-box"> 
+        <h1>Dashboard</h1>
+    <div class="dashboard-buttons">
+        <div class="row">
+            <a class="add-button" href="/addMovieRoute">Add Movie</a>
+            <a class="update-button" href="/updateMovieRoute">Update Movie</a>
+            <a class="delete-button" href="/deleteMovieRoute">Delete Movie</a>
+            <a class="scanAll-button" href="/scanAllMovies">Scan All Movies</a>
+        </div>
+        <div class="row">
+            <a class="add-button" href="/addShows Route">Add TV Shows</a>
+            <a class="update-button" href="/updateShows Route">Update TV Shows</a>
+            <a class="delete-button" href="/deleteShows Route">Delete TV Shows</a>
+        </div>
+        <div class="row">
+            <a class="add-button" href="/">Server Status</a>
+            <a class="update-button" href="/restart">Restart Server</a> 
+            <a class="delete-button" href="/poweroff">PowerOff Server</a>
+            <a class="logout-button" href="/admin/logout">Logout</a>
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    body{
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+}
+    .dashboard-box{
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+}
+</style>
+
+
+</html>
