@@ -18,7 +18,7 @@ const User = require('./models/User')
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 app.use(session({
-    secret: 'abcd1234',
+    secret: 'nhom4',
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({ mongoUrl: 'mongodb+srv://chien:chienpassword@cluster0.dgakc.mongodb.net/doan-nhom6' }),
@@ -44,11 +44,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const authRoutes = require('./routes/authRoutes');
-const dashboardRoutes = require('./routes/dashboard')
+const dashboardRoutes = require('./routes/dashboard');
+const addMovie = require('./routes/addMovie')
 
 
 app.use('/', authRoutes)
 app.use('/dashboard', dashboardRoutes)
+app.use('/',addMovie)
 
 
 app.listen(port, () => {

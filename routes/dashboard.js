@@ -14,9 +14,9 @@ router.get('/', isAdminAuthenticated, (req, res) => {
     res.render('dashboard');
 });
 
-router.get('/addMovieRoute', isAdminAuthenticated, (req, res) => {
-    res.render('addMovieList')
-})
+router.get('/addMovieRoute', isAdminAuthenticated,(req, res) => {
+    res.render('addMovieList'); 
+});
 
 
 module.exports = router;

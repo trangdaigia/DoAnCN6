@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Movie</title>
 </head>
+
 <body>
-    <h1>Add Movie</h1>
+    <h1>List of Movie</h1>
+    <form class="search-container" action="/fetch-movie" method="POST">
+        <input style="margin-right: 5px; padding: 8px; width: 200px;" type="text" id="searchTerm" name="searchTerm"
+            placeholder="Movie Name" required>
+        <button class="submit-btn" type="submit">Fetch Details</button>
+    </form>
 </body>
+</body>
+
 </html>
