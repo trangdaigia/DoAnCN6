@@ -8,13 +8,94 @@
 </head>
 
 <body>
-    <h1>List of Movie</h1>
+    <h1>List of Movies</h1>
     <form class="search-container" action="/fetch-movie" method="POST">
         <input style="margin-right: 5px; padding: 8px; width: 200px;" type="text" id="searchTerm" name="searchTerm"
             placeholder="Movie Name" required>
         <button class="submit-btn" type="submit">Fetch Details</button>
     </form>
+
+    {{#each movieList}}
+    <div class="movieDetailsContainer">
+        <div class="posterContainer">
+            <img src="https://image.tmdb.org/t/p/original/{{this.poster_path}}" alt="Movie Poster">
+        </div>
+        <div class="detailsTextContainer">
+            <a href="/addMovie/{{this.id}}">
+                <h2>{{this.title}}</h2>
+            </a>
+            <p style="font-size: 0.8em; margin-bottom: 5px;">{{this.overview}}</p>
+            <p style="font-size: 0.9em; font-weight: bold;">Release Date: {{this.release_date}}</p>
+        </div>
+    </div>
+    {{/each}}
 </body>
-</body>
+
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .search-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .submit-btn {
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .movieDetailsContainer {
+        padding: 20px;
+        display: flex;
+        align-items: flex-start;
+        width: 60%;
+        margin: 20px auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+
+    .posterContainer {
+        margin-right: 20px;
+    }
+
+    .posterContainer img {
+        width: 150px;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .detailsTextContainer h2 {
+        margin-bottom: 10px;
+        font-size: 1.5em;
+    }
+
+    .detailsTextContainer p {
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    a:hover {
+        color: #4CAF50;
+    }
+</style>
 
 </html>
