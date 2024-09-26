@@ -1,11 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Edit Movie List</title>
 </head>
+
 <body>
     <h1>Edit Movie List</h1>
+    <a href="/dashboard">Go to Dashboard</a>
+    {{#if movies.length}}
+    {{#each movies}}
+        <div class="moviesDetailsContainer">
+            <div class="posterContainer">
+                <img src="https://image.tmdb.org/t/p/original/{{this.posterPath}}" alt="Movie Poster">
+            </div>
+            <div class="detailsTextContainer">
+                <a href="/movies/{{this._id}}">
+                    <h2>{{this.title}}</h2>
+                </a>
+                <p style="font-size: 0.8em; margin-bottom:5px">{{this.overview}}</p>
+                <p style="font-size: 0.8em; font-weight: bold;">Release Date: {{this.releaseDate}}</p>
+            </div>
+        </div>
+    {{/each}}
+{{else}}
+    <p>No movies available.</p>
+{{/if}}
+
+
 </body>
+
 </html>

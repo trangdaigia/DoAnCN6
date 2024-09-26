@@ -22,6 +22,7 @@ const movieSchema = new mongoose.Schema({
     ratings: Number,
 });
 
-const Movie = mongoose.model('Movie', movieSchema)
+const Movie = mongoose.models.Movie || mongoose.model('Movie', movieSchema);
 
 module.exports = Movie;
+
