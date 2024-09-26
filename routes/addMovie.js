@@ -56,11 +56,24 @@ router.get("/addMovie/:movieId", async (req, res) => {
             }
         })
         
-        movieDetails.watchProviders = watchProviders
-        res.json(movieDetails)
+        movieDetails.watchProviders = watchProviders;
+        const genreIds = movieDetails.genres.map(genre => genre.id);
+        const genreNames = movieDetails.genres.map(genre => genre.name);
+        movieDetails.genreIds = genreIds;
+        movieDetails.genres = genreNames;
+        movieDetails.production_companies = movieDetails.production_companies.map(company => company.name);
+        movieDetails.watchProviders = movieDetails.watchProviders.map(provider => provider.providerName);
 
+        res.render('addMovie', { movieDetails });
     } catch (error) {
-
+        console.error(error);
+        if (!res.headersSent) {
+            res.status(500).json({ error: 'Failed to fetch movie details' });
+        }
     }
+
+    router.post('/add-movie-details', async(req,res)=>{
+        console.log("Movie details saved to database")
+    })
 })
 module.exports = router;

@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.movieDetailsContainer {
+    padding: 20px;
+    display: flex;
+    align-items: flex-start; 
+    width: 50%;
+    margin: 20px auto; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.posterContainer {
+    margin-right: 20px;
+}
+
+.posterContainer img {
+    width: 150px; 
+    height: auto;
+}
+
+.detailsTextContainer {
+    text-align: left;
+}
+
+.detailsTextContainer h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.detailsTextContainer p {
+    margin: 5px 0; 
+    font-size: 1rem;
+    color: #333;
+}
+
+.submit-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.submit-btn:hover {
+    background-color: #45a049; 
+}
+
+
+.formContainer {
+    position: relative;
+    width: 80%;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid rgb(207, 203, 203);
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.formContainer label {
+    text-align: left;
+    width: 100%;
+    margin: 10px 0 5px 0;
+    font-size: 1rem;
+}
+
+.formContainer input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px 0;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
