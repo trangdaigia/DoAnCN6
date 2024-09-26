@@ -12,4 +12,13 @@ router.get('/edit-movie-list', async (req, res) => {
     }
 });
 
+router.get('/movies/:id', async(req,res)=>{
+    try {
+        const movie = await Movie.findById(req.params.id);
+        res.render('updateMovieDetails', { movie })
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+})
 module.exports = router;
