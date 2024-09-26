@@ -46,12 +46,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboard');
 const addMovie = require('./routes/addMovie')
-
+const updateMovieRoute = require('./routes/updateMovie');
 
 app.use('/', authRoutes)
 app.use('/dashboard', dashboardRoutes)
 app.use('/',addMovie)
-
+app.use('/', updateMovieRoute);
 
 app.listen(port, () => {
     console.log(`Da ket noi API cong ${port}`)
