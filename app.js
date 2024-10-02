@@ -47,27 +47,13 @@ const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboard');
 const addMovie = require('./routes/addMovie')
 const updateMovieRoute = require('./routes/updateMovie');
+const myList = require('./routes/mylist')
 
 app.use('/', authRoutes)
 app.use('/dashboard', dashboardRoutes)
 app.use('/',addMovie)
 app.use('/', updateMovieRoute);
-
-app.get('/update-movie/:id', async (req, res) => {
-    try {
-        const movie = await Movie.findById(req.params.id);
-        if (movie) {
-            console.log(movie.runtime); // Debug để kiểm tra runtime
-            res.render('updateMovieDetails', { movie });
-        } else {
-            res.status(404).send('Movie not found');
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
-    }
-});
-
+app.use('/', myList);
 
 app.listen(port, () => {
     console.log(`Da ket noi API cong ${port}`)
