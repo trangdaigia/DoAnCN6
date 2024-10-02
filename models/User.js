@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false, 
     },
+    mylist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Movie'
+    }]
 })
 
 userSchema.plugin(passportLocalMongoose);
