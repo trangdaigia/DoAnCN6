@@ -4,13 +4,27 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const userSchema = new mongoose.Schema({
     username: String,
     password: String,
-    isAdmin:{
+    isAdmin: {
         type: Boolean,
-        default: false, 
+        default: false,
     },
     mylist: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Movie'
+        ref: 'Movie'
+    }],
+    watchedMovies: [{
+        movie: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Movie'
+        },
+        watchedTime: {
+            type: Number,
+            default: 0,
+        },
+        uploadTime: {
+            type: Number,
+            default: Date.now,
+        }
     }]
 })
 

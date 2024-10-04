@@ -22,4 +22,9 @@ router.get('/updateMovieRoute', isAdminAuthenticated, (req, res) => {
     res.redirect('/edit-movie-list'); 
 });
 
+router.get('/deleteMovieRoute', isAdminAuthenticated, (req, res) => {
+    res.redirect('/delete-movie'); 
+});
+
+
 module.exports = router;

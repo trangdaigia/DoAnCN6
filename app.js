@@ -43,17 +43,25 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const authRoutes = require('./routes/authRoutes');
-const dashboardRoutes = require('./routes/dashboard');
+const authRoutes = require('./routes/authRoutes')
+const dashboardRoutes = require('./routes/dashboard')
 const addMovie = require('./routes/addMovie')
-const updateMovieRoute = require('./routes/updateMovie');
+const updateMovieRoute = require('./routes/updateMovie')
 const myList = require('./routes/mylist')
+const watchedMovies = require('./routes/watchedMovie')
+const watchedMoviesRoutes = require('./routes/watchedMovie')
+const deleteMovie = require('./routes/deleteMovie')
+const getMovies = require('./routes/getMovies')
 
 app.use('/', authRoutes)
 app.use('/dashboard', dashboardRoutes)
 app.use('/',addMovie)
-app.use('/', updateMovieRoute);
-app.use('/', myList);
+app.use('/', updateMovieRoute)
+app.use('/', myList)
+app.use('/', watchedMovies)
+app.use('/', watchedMoviesRoutes)
+app.use('/', deleteMovie)
+app.use('/', getMovies)
 
 app.listen(port, () => {
     console.log(`Da ket noi API cong ${port}`)
