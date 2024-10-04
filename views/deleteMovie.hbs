@@ -33,6 +33,8 @@
         .posterContainer img {
             width: 150px;
             height: auto;
+            border-radius: 5px;
+         
         }
 
         .detailsTextContainer {
@@ -58,12 +60,13 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
+            transition: background-color 0.3s;
+     
         }
 
         .submit-btn:hover {
             background-color: #45a049;
         }
-
 
         .formContainer {
             position: relative;
@@ -91,8 +94,20 @@
             margin: 5px 0 20px 0;
             box-sizing: border-box;
             font-size: 1rem;
+            border: 1px solid #ccc;
+          
+            border-radius: 4px;
+       
+            transition: border-color 0.3s;
+           
         }
 
+        .formContainer input:focus {
+            border-color: #4CAF50;
+           
+            outline: none;
+            
+        }
 
 
         .delete-btn {
