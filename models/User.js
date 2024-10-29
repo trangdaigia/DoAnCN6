@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
             default: 0,
         },
         uploadTime: {
-            type: Number,
+            type: Date,  
             default: Date.now,
         }
     }]
