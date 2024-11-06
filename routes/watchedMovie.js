@@ -1,156 +1,124 @@
 const express = require('express');
 const router = express.Router();
-const isLoggedIn = require('../routes/isLoggedIn');
-const Movie = require('../models/movie');
+const isLoggedIn = require('../routes/isLoggedin')
+const Movie = require('../models/movie')
 
-// Cập nhật thời gian xem của một bộ phim
+router.get('/watched-movies', isLoggedIn, async (req, res) => {
+    try {
+        const user = req.user;
+
+        // Fetch all movies with their watched times
+        const watchedMovies = await Promise.all(user.watchedMovies.map(async ({ movie, watchedTime, uploadTime }) => {
+            // Populate the movie details using the movie ID
+            const movieDetails = await Movie.findById(movie);
+
+            return {
+                movie: movieDetails,
+                watchedTime,
+                uploadTime,
+            };
+        }));
+
+        // Sort the watchedMovies based on the uploadTime in descending order
+        watchedMovies.sort((a, b) => b.uploadTime - a.uploadTime);
+        // watchedMovies.sort((a, b) => new Date(b.uploadTime) - new Date(a.uploadTime));
+
+        res.json({ success: true, watchedMovies });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+
+
 router.post('/update-watched-time/:movieId', isLoggedIn, async (req, res) => {
     try {
         const user = req.user;
         const movieId = req.params.movieId;
-        const watchedTime = req.body.watchedTime;
+        const watchedTime = req.body.watchedTime; // Assuming you send the watched time in the request body
 
+        // Find the movie in the user's watchedMovies and update the watched time
         const movieToUpdate = user.watchedMovies.find(item => item.movie.equals(movieId));
-        console.log("Movie to update", movieToUpdate);
-
-        // Lấy thời gian hiện tại thay vì giá trị cứng
-        const currentTime = new Date();
-
         if (movieToUpdate) {
             movieToUpdate.watchedTime = watchedTime;
-            movieToUpdate.uploadTime = currentTime;  // Thời gian hiện tại
+
+            // Update the uploadTime based on the associated movie's upload time
+            const movieDetails = await Movie.findById(movieId);
+            if (movieDetails) {
+                movieToUpdate.uploadTime = Date.now();
+            }
         } else {
-            user.watchedMovies.push({
-                movie: movieId,
-                watchedTime: watchedTime,
-                uploadTime: currentTime  // Thời gian hiện tại
-            });
+            // If the movie is not in watchedMovies, add it
+            const movieDetails = await Movie.findById(movieId);
+            if (movieDetails) {
+                console.log("Movie Details upload time", movieDetails)
+                user.watchedMovies.push({ movie: movieId, watchedTime, uploadTime: Date.now() });
+            }
         }
 
         await user.save();
-
-        res.status(200).json({
-            success: true,
-            message: "Watched time updated successfully",
-            watchedMovies: user.watchedMovies
-        });
+        res.json({ success: true, user });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
 
-// Xoá thời gian xem của một bộ phim
-router.post('/remove-watched-time/:movieId', isLoggedIn, async (req, res) => {
-    try {
-        const user = req.user;
-        const { movieId } = req.params;
 
-        const movieIndexToRemove = user.watchedMovies.findIndex(item => item.movie.equals(movieId));
-
-        if (movieIndexToRemove !== -1) {
-            user.watchedMovies.splice(movieIndexToRemove, 1);
-            await user.save();
-
-            res.json({
-                success: true,
-                message: "Movie removed from watched list successfully"
-            });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: "Movie not found in watched list"
-            });
-        }
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
-// Xoá toàn bộ danh sách phim đã xem
-router.post('/remove-all-watched-movies', isLoggedIn, async (req, res) => {
-    try {
-        const user = req.user;
-        user.watchedMovies = [];
-        await user.save();
-
-        res.json({ success: true, message: 'All watched movies removed successfully' });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
-// Lấy thời gian xem của một phim cụ thể
 router.get('/watched-time/:movieId', isLoggedIn, async (req, res) => {
     try {
         const user = req.user;
-        const { movieId } = req.params;
+        const movieId = req.params.movieId;
 
+        // Find the movie in the user's watchedMovies and retrieve the watched time
         const movieWatchedTime = user.watchedMovies.find(item => item.movie.equals(movieId));
 
         if (movieWatchedTime) {
             res.json({ success: true, watchedTime: movieWatchedTime.watchedTime });
         } else {
-            res.json({ success: true, watchedTime: 0 });
+            res.json({ success: true, watchedTime: 0 }); // If movie not found, return 0 watched time
         }
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
-// Lấy danh sách toàn bộ phim đã xem
-router.get('/watched-movies', isLoggedIn, async (req, res) => {
+
+router.post('/remove-watched-movie/:movieId', isLoggedIn, async (req, res) => {
+    try {
+        const user = req.user;
+        const movieIdToRemove = req.params.movieId;
+
+        // Find the index of the movie in the watchedMovies array
+        const movieIndexToRemove = user.watchedMovies.findIndex(item => item.movie.equals(movieIdToRemove));
+
+        if (movieIndexToRemove !== -1) {
+            // If the movie is found, remove it from the watchedMovies array
+            user.watchedMovies.splice(movieIndexToRemove, 1);
+            await user.save();
+
+            res.json({ success: true, message: 'Movie removed from watched list successfully' });
+        } else {
+            // If the movie is not found, send a response indicating that the movie is not in the watched list
+            res.status(404).json({ success: false, message: 'Movie not found in watched list' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+
+router.post('/remove-all-watched-movies', isLoggedIn, async (req, res) => {
     try {
         const user = req.user;
 
-        if (!user.watchedMovies || user.watchedMovies.length === 0) {
-            return res.status(200).json({ success: true, watchedMovies: [] });
-        }
+        // Clear the watchedMovies array
+        user.watchedMovies = [];
+        
+        await user.save();
 
-        const watchedMovies = await Promise.all(user.watchedMovies.map(async ({ movie, watchedTime, uploadTime }) => {
-            const movieDetails = await Movie.findById(movie);
-
-            if (!movieDetails) {
-                return {
-                    movie: { title: "Unknown", id: movie },
-                    watchedTime,
-                    uploadTime: new Date(uploadTime).toLocaleString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh' }),
-                };
-            }
-
-            return {
-                movie: {
-                    id: movieDetails._id,
-                    movieID: movieDetails.movieID,
-                    backdropPath: `https://image.tmdb.org/t/p/original/${movieDetails.backdropPath}`,
-                    budget: Number(movieDetails.budget) || 0,
-                    genreIds: movieDetails.genreIds || [], 
-                    genres: movieDetails.genres || [],
-                    originalTitle: movieDetails.originalTitle,
-                    overview: movieDetails.overview,
-                    ratings: Number(movieDetails.ratings) || 0,
-                    popularity: Number(movieDetails.popularity) || 0,
-                    posterPath: `https://image.tmdb.org/t/p/original/${movieDetails.posterPath}`,
-                    productionCompanies: movieDetails.productionCompanies || [],
-                    releaseDate: movieDetails.releaseDate,
-                    revenue: Number(movieDetails.revenue) || 0,
-                    runtime: movieDetails.runtime || 0,
-                    status: movieDetails.status,
-                    title: movieDetails.title,
-                    watchProviders: movieDetails.watchProviders || [],
-                    logos: `https://image.tmdb.org/t/p/original/${movieDetails.logos}`,
-                    downloadLink: movieDetails.downloadLink || "",
-                },
-                watchedTime,
-                uploadTime: new Date(uploadTime).toLocaleString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh' }),
-            };
-        }));
-
-        watchedMovies.sort((a, b) => new Date(b.uploadTime) - new Date(a.uploadTime));
-
-        res.status(200).json({ success: true, watchedMovies });
+        res.json({ success: true, message: 'All watched movies removed successfully' });
     } catch (error) {
-        console.error("Error fetching watched movies:", error);
         res.status(500).json({ success: false, error: error.message });
     }
 });

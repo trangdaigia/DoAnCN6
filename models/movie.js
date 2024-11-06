@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
+
 const movieSchema = new mongoose.Schema({
-    movieID: Number, 
+    movieID: Number,
     backdropPath: String,
     budget: Number,
     genres: [String],
@@ -20,9 +21,9 @@ const movieSchema = new mongoose.Schema({
     logos: String,
     downloadLink: String,
     ratings: Number,
+    ignoreTitleOnScan: Boolean
 });
 
-const Movie = mongoose.models.Movie || mongoose.model('Movie', movieSchema);
+const Movie = mongoose.model('Movie', movieSchema);
 
 module.exports = Movie;
-

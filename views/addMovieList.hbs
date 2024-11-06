@@ -3,15 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Movie</title>
+    <title>Add Movie List</title>
 </head>
 
 <body>
     <h1>List of Movies</h1>
-    <form class="search-container" action="/fetch-movie" method="POST">
+
+    <form class="search-container" action="/fetch-movie" method="post">
         <input style="margin-right: 5px; padding: 8px; width: 200px;" type="text" id="searchTerm" name="searchTerm"
-            placeholder="Movie Name" required>
+            placeholder="Movie Name or ID" required>
         <button class="submit-btn" type="submit">Fetch Details</button>
     </form>
 
@@ -20,19 +22,22 @@
         <div class="posterContainer">
             <img src="https://image.tmdb.org/t/p/original/{{this.poster_path}}" alt="Movie Poster">
         </div>
+
         <div class="detailsTextContainer">
             <a href="/addMovie/{{this.id}}">
                 <h2>{{this.title}}</h2>
             </a>
-            <p style="font-size: 0.8em; margin-bottom: 5px;">{{this.overview}}</p>
-            <p style="font-size: 0.9em; font-weight: bold;">Release Date: {{this.release_date}}</p>
+            <p style="font-size: 0.8em; margin-bottom:5px">{{this.overview}}</p>
+            <p style="font-size: 0.8em; font-weight: bold;">Release Date: {{this.release_date}}</p>
+
         </div>
     </div>
     {{/each}}
+
 </body>
 
 <style>
-    @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
     body {
         font-family: 'Poppins', sans-serif;
@@ -45,7 +50,7 @@
     .search-container {
         display: flex;
         justify-content: center;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .submit-btn {
@@ -58,15 +63,12 @@
     }
 
     .movieDetailsContainer {
-        padding: 20px;
+
+        padding: 10px;
         display: flex;
-        align-items: flex-start;
-        width: 60%;
-        margin: 20px auto;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        background-color: #f9f9f9;
+        align-items: center;
+        width: 50%;
+        margin: 0 auto;
     }
 
     .posterContainer {
@@ -74,14 +76,16 @@
     }
 
     .posterContainer img {
-        width: 150px;
+        width: 100px;
         height: auto;
-        border-radius: 8px;
+    }
+
+    .detailsTextContainer {
+        text-align: left;
     }
 
     .detailsTextContainer h2 {
         margin-bottom: 10px;
-        font-size: 1.5em;
     }
 
     .detailsTextContainer p {
@@ -90,11 +94,7 @@
 
     a {
         text-decoration: none;
-        color: black;
-    }
-
-    a:hover {
-        color: #4CAF50;
+        color: :'black';
     }
 </style>
 

@@ -1,17 +1,14 @@
+// routes/deleteMovie.js
 const express = require('express');
 const router = express.Router();
-const Movie = require('../models/movie')
+const Movie = require('../models/movie');
 const User = require('../models/User')
+
 router.get('/delete-movie', async (req, res) => {
     try {
         const movies = await Movie.find();
-
-
-        res.render('deleteMovie', { movies })
-
-
+        res.render('deleteMovie', { movies });
     } catch (error) {
-
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
@@ -19,24 +16,17 @@ router.get('/delete-movie', async (req, res) => {
 
 router.post('/delete-movie/:id', async (req, res) => {
     try {
-   
         const deletedMovie = await Movie.findOneAndDelete({ _id: req.params.id });
-        
-        if (!deletedMovie) {
-            return res.status(404).send('Movie not found');
-        }
 
-      
+        // Remove the movie from users' mylist
         await User.updateMany({}, { $pull: { mylist: req.params.id } });
-        await User.updateMany({}, { $pull: { watchedMovies: { movie: req.params.id } } });
 
-   
+        // Remove the movie from users' watchedMovies
+        await User.updateMany({}, { $pull: { "watchedMovies": { movie: req.params.id } } });
+
         const movies = await Movie.find();
-
-        res.render('deleteMovie', {
-            movies: movies,
-            successMessage: 'Movie deleted successfully!'
-        });
+        res.render('deleteMovie', { movies, successMessage: 'Movie deleted successfully!' });
+        // res.redirect('/delete-movie');
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');

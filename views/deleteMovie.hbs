@@ -5,134 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Deletion</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .movieDetailsContainer {
-            padding: 20px;
-            display: flex;
-            align-items: flex-start;
-            width: 50%;
-            margin: 20px auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            background-color: #f9f9f9;
-        }
-
-        .posterContainer {
-            margin-right: 20px;
-        }
-
-        .posterContainer img {
-            width: 150px;
-            height: auto;
-            border-radius: 5px;
-         
-        }
-
-        .detailsTextContainer {
-            text-align: left;
-        }
-
-        .detailsTextContainer h2 {
-            margin-bottom: 10px;
-            font-size: 1.5rem;
-        }
-
-        .detailsTextContainer p {
-            margin: 5px 0;
-            font-size: 1rem;
-            color: #333;
-        }
-
-        .submit-btn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-     
-        }
-
-        .submit-btn:hover {
-            background-color: #45a049;
-        }
-
-        .formContainer {
-            position: relative;
-            width: 80%;
-            margin: 20px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 2px solid rgb(207, 203, 203);
-            padding: 20px;
-            border-radius: 5px;
-            background-color: #fff;
-        }
-
-        .formContainer label {
-            text-align: left;
-            width: 100%;
-            margin: 10px 0 5px 0;
-            font-size: 1rem;
-        }
-
-        .formContainer input {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0 20px 0;
-            box-sizing: border-box;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-          
-            border-radius: 4px;
-       
-            transition: border-color 0.3s;
-           
-        }
-
-        .formContainer input:focus {
-            border-color: #4CAF50;
-           
-            outline: none;
-            
-        }
-
-
-        .delete-btn {
-            padding: 10px;
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-    </style>
-
-
-    </style>
 </head>
 
 <body>
     <h1>Delete Movie</h1>
-    <a href="/dashboard">Go to Dashboard</a>
+    <a href="/">Go to Dashboard</a>
+    {{!-- {{#if successMessage}}
+    <p style="color: green;">{{successMessage}}</p>
+    {{/if}}
+    <ul>
+        {{#each movies}}
+        <li>
+            <img src="{{this.posterPath}}" alt="{{this.title}} Poster" width="100">
+            {{this.title}}
+            <form action="/delete-movie/{{this._id}}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        {{/each}}
+
+    </ul> --}}
 
     {{#each movies}}
     <div class="movieDetailsContainer">
         <div class="posterContainer">
-            <img alt="Movie Poster" data-poster-path="{{this.posterPath}}">
+            <img src="https://image.tmdb.org/t/p/original/{{this.posterPath}}" alt="Movie Poster">
         </div>
 
         <div class="detailsTextContainer">
@@ -147,20 +44,58 @@
     </div>
     {{/each}}
 
-    <script>
-        // Get all poster images
-        const posterImages = document.querySelectorAll('.posterContainer img');
-
-        // Iterate through each poster image
-        posterImages.forEach(img => {
-            const posterPath = img.dataset.posterPath;
-            if (posterPath.startsWith('http://')) {
-                img.src = posterPath;
-            } else {
-                img.src = `https://image.tmdb.org/t/p/original/${posterPath}`;
-            }
-        });
-    </script>
 </body>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .movieDetailsContainer {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        width: 50%;
+        margin: 0 auto;
+    }
+
+    .posterContainer {
+        margin-right: 20px;
+    }
+
+    .posterContainer img {
+        width: 100px;
+        height: auto;
+    }
+
+    .detailsTextContainer {
+        text-align: left;
+    }
+
+    .detailsTextContainer h2 {
+        margin-bottom: 10px;
+    }
+
+    .detailsTextContainer p {
+        margin: 0;
+    }
+
+    .delete-btn {
+    padding: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+</style>
 
 </html>

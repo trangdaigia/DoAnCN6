@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Admin Dashboard</title>
 </head>
 
 <body>
@@ -12,23 +12,26 @@
         <h1>Dashboard</h1>
         <div class="dashboard-buttons">
             <div class="row">
-                <a class="add-button" href="/dashboard/addMovieRoute">Add Movie</a>
-                <a class="update-button" href="/dashboard/updateMovieRoute">Update Movie</a>
-                <a class="delete-button" href="/dashboard/deleteMovieRoute">Delete Movie</a>
-                <a class="scanAll-button" href="/scanAllMovies">Scan All Movies</a>
+                <a class="add-button" href="/addMovieRoute">Add Movie</a>
+                <a class="update-button" href="/updateMovieRoute">Update Movie</a>
+                <a class="delete-button" href="/deleteMovieRoute">Delete Movie</a>
+                <a class="scanAll-button" href="/scan-all-movie-page">Scan All Movies</a>
             </div>
+
             <div class="row">
                 <a class="add-button" href="/addShowsRoute">Add TV Shows</a>
                 <a class="update-button" href="/updateShowsRoute">Update TV Shows</a>
                 <a class="delete-button" href="/deleteShowsRoute">Delete TV Shows</a>
-                <a class="scanAll-button" href="/scanAllShows">Scan All TV Shows</a>
+                <a class="scanAll-button" href="/scan-all-shows-page">Scan All TV Shows</a>
             </div>
+
             <div class="row">
-                <a class="status-button" href="/">Server Status</a>
+                <a class="add-button" href="/poster-link-update">Manage Posters</a>
                 <a class="update-button" href="/restart">Restart Server</a>
-                <a class="poweroff-button" href="/poweroff">PowerOff Server</a>
+                <a class="delete-button" href="/poweroff">PowerOff Server</a>
                 <a class="logout-button" href="/admin/logout">Logout</a>
             </div>
+            
         </div>
     </div>
 </body>
@@ -118,7 +121,7 @@
         flex: 1;
         margin: 0 10px;
         padding: 15px;
-        background-color: #fd7e14;
+        background-color: #f87744;
         color: #fff;
         text-decoration: none;
         text-align: center;
@@ -127,31 +130,6 @@
         transition: background-color 0.3s ease;
     }
 
-    .status-button {
-        flex: 1;
-        margin: 0 10px;
-        padding: 15px;
-        background-color: #28a745;
-        color: #fff;
-        text-decoration: none;
-        text-align: center;
-        font-weight: bold;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
-
-    .poweroff-button {
-        flex: 1;
-        margin: 0 10px;
-        padding: 15px;
-        background-color: #dc3545;
-        color: #fff;
-        text-decoration: none;
-        text-align: center;
-        font-weight: bold;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
 
     .logout-button {
         flex: 1;
@@ -166,32 +144,20 @@
         transition: background-color 0.3s ease;
     }
 
-    .add-button:hover {
-        background-color: #218838;
+    .add-movie-button:hover {
+        background-color: #276837;
     }
 
-    .update-button:hover {
-        background-color: #0056b3;
+    .update-movie-button:hover {
+        background-color: #2866a8;
     }
 
-    .delete-button:hover {
-        background-color: #c82333;
-    }
-
-    .scanAll-button:hover {
-        background-color: #e8590c;
-    }
-
-    .status-button:hover {
-        background-color: #218838;
-    }
-
-    .poweroff-button:hover {
-        background-color: #c82333;
+    .delete-movie-button:hover {
+        background-color: #921e2a;
     }
 
     .logout-button:hover {
-        background-color: #5a6268;
+        background-color: #313437;
     }
 </style>
 
