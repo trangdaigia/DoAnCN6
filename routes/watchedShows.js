@@ -5,14 +5,14 @@ const Shows = require('../models/Shows')
 
 router.get('/all-watched-shows', isLoggedIn, async (req, res) => {
     try {
-        const user = req.user;
-        const shows = await Shows.find();
+        const user = req.user; // Lấy thông tin người dùng hiện tại từ middleware isLoggedIn
+        const shows = await Shows.find(); // Lấy tất cả chương trình từ MongoDB
 
-        // Fetch all shows with their watched times
+        // Tạo danh sách các tập đã xem, bao gồm thông tin chi tiết từng tập
         const watchedShows = await Promise.all(user.watchedShows.map(async ({ _id, episode, watchedTime, uploadTime }) => {
             let episodeInfo = null;
 
-            // Iterate through all shows and their seasons to find the specific episode
+            // Duyệt qua từng chương trình và từng mùa để tìm tập đã xem
             for (const show of shows) {
                 for (const season of show.seasons) {
                     const foundEpisode = season.episodes.find(ep => ep._id.toString() === episode.toString());
@@ -31,12 +31,8 @@ router.get('/all-watched-shows', isLoggedIn, async (req, res) => {
                         };
                         break;
                     }
-
                 }
-
-                if (episodeInfo) {
-                    break;
-                }
+                if (episodeInfo) break;
             }
 
             return {
@@ -47,12 +43,12 @@ router.get('/all-watched-shows', isLoggedIn, async (req, res) => {
             };
         }));
 
-        // Sort the watchedShows based on the uploadTime in descending order
+        // Sắp xếp danh sách theo thời gian xem (uploadTime giảm dần)
         watchedShows.sort((a, b) => b.uploadTime - a.uploadTime);
 
-        res.json({ success: true, watchedShows });
+        res.json({ success: true, watchedShows }); // Trả về danh sách tập đã xem
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, error: error.message }); // Xử lý lỗi
     }
 });
 
@@ -60,125 +56,124 @@ router.get('/all-watched-shows', isLoggedIn, async (req, res) => {
 
 router.post('/update-shows-watched-time/:episodeID', isLoggedIn, async (req, res) => {
     try {
-        const user = req.user;
-        const episodeID = req.params.episodeID;
-        const watchedTime = req.body.watchedTime; // Assuming you send the watched time in the request body
-        const episodeShowID = req.body.showID;
+        const user = req.user; // Lấy thông tin người dùng hiện tại
+        const episodeID = req.params.episodeID; // Lấy ID tập từ URL
+        const watchedTime = req.body.watchedTime; // Thời gian đã xem từ yêu cầu body
+        const episodeShowID = req.body.showID; // ID chương trình của tập
 
-        // Find the show in the user's watchedShows and update the watched time
+        // Tìm tập trong danh sách watchedShows của người dùng
         const episodeToUpdate = user.watchedShows.find(item => item.episode.equals(episodeID));
         if (episodeToUpdate) {
+            // Nếu đã có trong danh sách, cập nhật thời gian đã xem và thời gian tải lên
             episodeToUpdate.watchedTime = watchedTime;
             episodeToUpdate.uploadTime = Date.now();
         } else {
-
+            // Nếu chưa có, thêm mới tập vào danh sách
             user.watchedShows.push({ episode: episodeID, showID: episodeShowID, watchedTime, uploadTime: Date.now() });
         }
 
-        await user.save();
-        res.json({ success: true, user });
+        await user.save(); // Lưu thông tin người dùng vào MongoDB
+        res.json({ success: true, user }); // Trả về người dùng đã cập nhật
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, error: error.message }); // Xử lý lỗi
     }
 });
+
 
 
 router.get('/get-show-watchtime/:episodeID', isLoggedIn, async (req, res) => {
     try {
-        const user = req.user;
-        const episodeID = req.params.episodeID;
+        const user = req.user; // Lấy thông tin người dùng
+        const episodeID = req.params.episodeID; // Lấy ID tập từ URL
 
-        // Find the episode in the watchedShows array
+        // Tìm tập trong danh sách watchedShows của người dùng
         const watchedEpisode = user.watchedShows.find(item => item.episode.equals(episodeID));
 
         if (watchedEpisode) {
-            res.json({ success: true, watchedTime: watchedEpisode.watchedTime });
+            res.json({ success: true, watchedTime: watchedEpisode.watchedTime }); // Trả về thời gian đã xem
         } else {
-            res.status(404).json({ success: false, message: 'Episode not found in watchedShows' });
+            res.status(404).json({ success: false, message: 'Episode not found in watchedShows' }); // Nếu không tìm thấy
         }
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, error: error.message }); // Xử lý lỗi
     }
 });
+
 
 router.delete('/remove-watched-show/:episodeID', isLoggedIn, async (req, res) => {
     try {
-        const user = req.user;
-        const episodeID = req.params.episodeID;
+        const user = req.user; // Lấy thông tin người dùng
+        const episodeID = req.params.episodeID; // Lấy ID tập từ URL
 
-        // Find the index of the episode in the watchedShows array
+        // Tìm vị trí của tập trong danh sách watchedShows
         const indexToRemove = user.watchedShows.findIndex(item => item.episode.equals(episodeID));
 
         if (indexToRemove !== -1) {
-            // Remove the episode from the array if found
-            user.watchedShows.splice(indexToRemove, 1);
-            await user.save();
-            res.json({ success: true, user });
+            user.watchedShows.splice(indexToRemove, 1); // Xóa tập khỏi danh sách
+            await user.save(); // Lưu thông tin người dùng vào MongoDB
+            res.json({ success: true, user }); // Trả về người dùng đã cập nhật
         } else {
-            res.status(404).json({ success: false, message: 'Episode not found in watchedShows' });
+            res.status(404).json({ success: false, message: 'Episode not found in watchedShows' }); // Nếu không tìm thấy
         }
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, error: error.message }); // Xử lý lỗi
     }
 });
+
 
 
 router.get('/episode-info/:episodeId', async (req, res) => {
     try {
-        const episodeId = req.params.episodeId;
+        const episodeId = req.params.episodeId; // Lấy ID tập từ URL
+        const shows = await Shows.find(); // Lấy tất cả chương trình từ MongoDB
+        let seasonArray = null; // Mảng chứa danh sách tập của mùa
+        let showID = null; // ID chương trình chứa tập
 
-        // Find the episode in your data
-        const shows = await Shows.find(); // Retrieve shows from your database
-        let seasonArray = null;
-        let showID = null;
-
+        // Tìm tập trong các chương trình và mùa
         for (const show of shows) {
             for (const season of show.seasons) {
                 const foundEpisode = season.episodes.find(ep => ep._id.toString() === episodeId);
 
                 if (foundEpisode) {
-                    seasonArray = season.episodes;
-                    showID = show._id
+                    seasonArray = season.episodes; // Lấy danh sách tập của mùa
+                    showID = show._id; // Lấy ID chương trình
                     break;
                 }
             }
-
-            if (seasonArray) {
-                break;
-            }
+            if (seasonArray) break; // Thoát khỏi vòng lặp nếu tìm thấy
         }
 
         if (seasonArray) {
-            res.json({ success: true, showID, seasonArray });
+            res.json({ success: true, showID, seasonArray }); // Trả về danh sách tập và ID chương trình
         } else {
-            res.status(404).json({ success: false, message: 'Episode not found' });
+            res.status(404).json({ success: false, message: 'Episode not found' }); // Nếu không tìm thấy
         }
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, error: error.message }); // Xử lý lỗi
     }
 });
+
 
 // This will generate the latest episode ID watched by the user from a particular show
 router.get('/get-latest-watched-episodeID/:showID', isLoggedIn, async (req, res) => {
     try {
-        const { showID } = req.params;
-        const user = req.user;
-        const watchedShows = user.watchedShows.filter(show => show.showID.toString() === showID);
+        const { showID } = req.params; // Lấy ID chương trình từ URL
+        const user = req.user; // Lấy thông tin người dùng
+        const watchedShows = user.watchedShows.filter(show => show.showID.toString() === showID); // Lọc tập thuộc chương trình
+
         if (watchedShows.length === 0) {
-            return res.json({ episodeID: null });
+            return res.json({ episodeID: null }); // Nếu không có tập đã xem
         }
 
-        // Sort watched episodes by uploadTime in descending order
+        // Sắp xếp tập đã xem theo thời gian tải lên (mới nhất trước)
         watchedShows.sort((a, b) => b.uploadTime - a.uploadTime);
 
-        // Get the episodeID of the latest episode
-        const latestEpisodeID = watchedShows[0].episode;
-
-        res.json({ episodeID: latestEpisodeID });
-
+        const latestEpisodeID = watchedShows[0].episode; // Lấy ID tập mới nhất
+        res.json({ episodeID: latestEpisodeID }); // Trả về ID tập mới nhất
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, error: error.message }); // Xử lý lỗi
     }
 });
+
 
 module.exports = router;
